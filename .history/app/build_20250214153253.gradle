@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.example.admin.sinlineapplication'
+    compileSdkVersion 33
+    
+    defaultConfig {
+        applicationId "com.example.admin.sinlineapplication"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndkVersion "28.0.13004108"
+
+        ndk {
+            moduleName "serial_port"
+            ldLibs "log"
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+    }
+    signingConfigs {
+        release {
+            keyAlias 'android.keystore'
+            storePassword '123456'
+            keyPassword '123456'
+            storeFile file('../android.keystore')
+            v2SigningEnabled true
+        }
+        debug {
+            keyAlias 'android.keystore'
+            storePassword '123456'
+            keyPassword '123456'
+            storeFile file('../android.keystore')
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+    
+    sourceSets {
+        main {
+            jni.srcDirs = ['src/main/jni']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core:1.9.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
+}
